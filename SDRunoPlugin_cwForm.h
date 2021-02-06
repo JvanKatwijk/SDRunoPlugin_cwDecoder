@@ -23,7 +23,8 @@
 #define sideBorderWidth (8)
 
 // TODO: Change these numbers to the height and width of your form
-#define formWidth (297)
+//#define formWidth (297)
+#define formWidth (500)
 #define formHeight (240)
 
 class SDRunoPlugin_cwUi;
@@ -82,21 +83,19 @@ private:
 	// TODO: Now add your UI controls here
 
 //	first the test line
-//	nana::label  *cwText;
-	nana::label  cwText		{*this, nana::rectangle (30, 40, 230, 30) };
-	nana::label  cwSymbol		{*this, nana::rectangle (30, 80, 40, 20)};
-	nana::label  cwLetter		{*this, nana::rectangle (80, 80, 100, 20) };
-	nana::label  dotLengthdisplay 	{*this, nana::rectangle (30, 110, 40, 20) };
-	nana::label  spaceLengthdisplay {*this, nana::rectangle (80, 110, 40, 20) };
-	nana::label  agcPeakdisplay	{*this, nana::rectangle (30, 140, 60, 20) };
-	nana::label  noiseLeveldisplay 	{*this, nana::rectangle (110, 140, 60, 20) };
-	nana::label  rateDisplay	{*this, nana::rectangle (180, 140, 40, 20) };
-	nana::label actualWPM		{*this, nana::rectangle (30, 170, 40, 20) };
-	nana::spinbox WPM		{*this, nana::rectangle (100, 170, 80, 20) };
-	nana::button trackingButton     {*this, nana::rectangle (200, 170, 80, 20) };
-	nana::spinbox filterDegree	{*this, nana::rectangle (30, 200, 100, 30) };
-	nana::spinbox squelchLevel 	{*this, nana::rectangle (150, 200, 100, 30)};
- 
+	nana::label  cwText		{*this, nana::rectangle ( 30,  40, 400, 30) };
+	nana::label  cwSymbol		{*this, nana::rectangle ( 30,  80,  40, 20) };
+	nana::label  cwLetter		{*this, nana::rectangle ( 80,  80, 100, 20) };
+	nana::label  dotLengthdisplay 	{*this, nana::rectangle ( 30, 110,  40, 20) };
+	nana::label  spaceLengthdisplay {*this, nana::rectangle ( 80, 110,  40, 20) };
+	nana::label  agcPeakdisplay	{*this, nana::rectangle (130, 110,  60, 20) };
+	nana::label  noiseLeveldisplay 	{*this, nana::rectangle (200, 110,  60, 20) };
+	nana::label  rateDisplay	{*this, nana::rectangle (270, 110,  40, 20) };
+	nana::label  actualWPM		{*this, nana::rectangle (340, 110,  40, 20) };
+	nana::spinbox WPM		{*this, nana::rectangle ( 30, 170,  80, 20) };
+	nana::button trackingButton     {*this, nana::rectangle (200, 170,  80, 20) };
+	nana::spinbox filterDegree	{*this, nana::rectangle ( 30, 200, 100, 30) };
+	nana::spinbox squelchLevel 	{*this, nana::rectangle (150, 200, 100, 30) };
 
 	SDRunoPlugin_cwUi & m_parent;
 	IUnoPluginController & m_controller;

@@ -565,7 +565,7 @@ void	SDRunoPlugin_cw::cw_addText			(char c)  {
 	if (c < ' ')
 	   c = ' ';
 	textLine. append (1, c);
-	if (textLine. length () > 32)
+	if (textLine. length () > 60)
 	   textLine. erase (0, 1);
 	m_form. set_cwText (textLine);
 }
