@@ -354,7 +354,7 @@ void SDRunoPlugin_cwForm::Setup () {
 	filterDegree. bgcolor (nana::colors::black);
 	filterDegree. fgcolor (nana::colors::white);
 
-	WPM.		range (10, 50, 1);
+	WPM.		range (5, 50, 1);
 	WPM.            value (std::to_string (30));
 	WPM. events (). text_changed ([&](const nana::arg_spinbox &s) {
 	                              cw_setWordsperMinute (WPM. to_int ());}); 
