@@ -38,6 +38,8 @@ public:
 	int     cw_getSquelchValue      ();
 	int     cw_getWordsperMinute    ();
 	void	cw_switchTracking	();
+	void	set_searchWidth		(int);
+	void	trigger_tune		();
 
 //
 //	passing on downwards

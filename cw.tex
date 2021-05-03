@@ -29,7 +29,7 @@
 \newcommand{\notrans}[3]{#1 \stackrel{#2}{\not\! \longrightarrow} #3}
 \bibliographystyle{plain}
 \begin{document}
-\title{A simple CW plugin for SDRuno}
+\title{A simple CW plugin for SDRuno (Version 2)}
 \author{
 Jan van Katwijk\\
 Lazy Chair Computing \\
@@ -43,7 +43,7 @@ The Netherlands\\
 \includegraphics[width=140mm]{cw-example.png}
 \ \\
 \section{Introduction}
-The SDRuno cw plugin is a simple plugin to decode CW (continuous Waves) signals.
+The SDRuno cw plugin is a simple plugin to decode CW (Continuous Waves) signals.
 CW is in amateur bands still very popular, I am usually looking at the
 14 MHz band. 
 
@@ -86,6 +86,13 @@ CW signal is above the '0' in the auxiliary spectrum display.
 \end{itemize}
 The drawback of course is that CW transmissions are only a few seconds long,
 so by the time tuning is - more or less - correct, the transmission stopped.
+\par
+Version 2 of the decoder has an additional button for automatic fine tuning.
+Touhcing the button will instruct the software to look at a segment of the
+cand the width of which is given in the spinbox (default 400 Hz), and
+detect the strongest signal - a signal with at least 6dB above the
+average signal level in the segment. If such a signal in the spectrum is
+detected, tuning will be moving slowly to that point.
 \section{The plugin}
 The plugin widget  is shown in the picture
 
@@ -97,11 +104,11 @@ The way the plugin works is that the {\em duration} of the signal above
 a certain noise level is measured. As known, a dot and a space within the
 encoding of a letter have the same length, while a dash is supposed to take 3 times as much time.
 Experience shows that most operators transmit with app 25 to 30 words per
-minute. The spinbox - in the picture set to "24" - can be used to adapt 
+minute. The spinbox - in the picture set to "19" - can be used to adapt 
 the wpm estimate.
 
 The top line in the widget shows the received text,
-the second line - in the picture only containing three dots -
+the second line - in the picture only containing a single dot -
 displays the dots and dashes of the letter received.
 The third line contains 6 number displays, from left to right
 \begin{itemize}
@@ -121,13 +128,20 @@ is seen with a duration longer than a few seconds, a tracker can be activated
 that adapts the assumed WPM. However, for transmissions of 3, 4 seconds
 as usually seen on the 14 MHz band, it is not advisable to set the tracker on.
 
-Finally, the bottom row contains two spinboxes:
+Finally, the bottom row contains three spinboxes and a button:
 \begin{itemize}
-\item the filter depth. Before attempting to decode the on/off appearance
+\item the {\em filter depth}. Before attempting to decode the on/off appearance
 of the carrier, a lowpass filter is applied to the signal. The actual
 degree of the (FIR) filter is twice the amount on the selector plus 1.
-\item the squelch level. To distinguish signal from noise, a squelch level
+\item the {\em squelch level}. To distinguish signal from noise, a squelch level
 can be set.
+\item the width of the fine tuning search. The picture shows "400", indicating
+that - with the current frequency as middle - a segment of 400 Hz is searched
+for the strongest signal if "fine tuning" is on.
+\item the button, when touched will start the fine tuning, unttil either
+the strongerst signal in the selected region (one with a signal strength
+of 6 dB or more than the average signal strength of the region) or a time out
+expires.
 \end{itemize}
 \end{document}
 

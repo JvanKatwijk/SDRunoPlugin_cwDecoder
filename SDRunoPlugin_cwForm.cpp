@@ -39,6 +39,15 @@ int	SDRunoPlugin_cwForm::cw_getWordsperMinute () {
 void	SDRunoPlugin_cwForm::cw_switchTracking () {
 	m_parent. cw_switchTracking ();
 }
+
+void	SDRunoPlugin_cwForm::set_searchWidth	(int w) {
+	m_parent. set_searchWidth (w);
+}
+
+void	SDRunoPlugin_cwForm::trigger_tune	() {
+	m_parent. trigger_tune ();
+}
+
 //
 //	functions to show values on the GUI
 void	SDRunoPlugin_cwForm::cw_showTrackingMode (const std::string &s) {
@@ -199,6 +208,7 @@ void SDRunoPlugin_cwForm::Setup () {
 	bmInfo_min.bmiHeader.biCompression = BI_RGB;
 	bmInfo_min_over.bmiHeader.biCompression = BI_RGB;
 	bmInfo_bar.bmiHeader.biCompression = BI_RGB;
+	bmInfo_sett.bmiHeader.biCompression = BI_RGB;
 	bmInfo_sett_over.bmiHeader.biCompression = BI_RGB;
 	borderHeader.bfOffBits = rawDataOffset;
 	borderHeader.bfSize = bmInfo_border.bmiHeader.biSizeImage;
@@ -325,7 +335,7 @@ void SDRunoPlugin_cwForm::Setup () {
 	min_button.events().mouse_up([&] { min_button.load(img_min_normal, nana::rectangle(0, 0, 20, 15)); nana::API::zoom_window(this->handle(), false); });
 	min_button.events().mouse_leave([&] { min_button.load(img_min_normal, nana::rectangle(0, 0, 20, 15)); });
 
-	//Initialise the "Close button"
+//Initialise the "Close button"
 	close_button.load(img_close_normal, nana::rectangle(0, 0, 20, 15));
 	close_button.bgcolor(nana::color_rgb(0x000000));
 	close_button.move(nana::point(formWidth - 26, 9));
@@ -362,11 +372,23 @@ void SDRunoPlugin_cwForm::Setup () {
 	WPM. bgcolor(nana::colors::black);
 	WPM. fgcolor(nana::colors::white);
 
-
 	squelchLevel. range (1, 20, 1);
 	squelchLevel. value (std::to_string (5));
 	squelchLevel. events (). text_changed ([&](const nana::arg_spinbox &s) {
 	                            cw_setSquelchValue (squelchLevel. to_int ());}); 
+
+	searchWidth. range (0, 600, 1);
+	searchWidth. value (std::to_string (400));
+	searchWidth. events (). text_changed ([&](const nana::arg_spinbox &s) {
+	                            set_searchWidth (searchWidth. to_int ());});
+	searchWidth. tooltip ("range of search for maximum signal value");
+
+	tuneIn. caption ("tune");
+	tuneIn. tooltip ("trigger fine tuner");
+	tuneIn. events (). click ([&](){trigger_tune ();});
+	tuneIn. fgcolor (nana::colors::white);
+	tuneIn. bgcolor (nana::colors::black);
+
 	squelchLevel. tooltip ("squelchLevel");
 	squelchLevel. fgcolor(nana::colors::white);
 	squelchLevel. bgcolor(nana::colors::black);
@@ -377,14 +399,19 @@ void SDRunoPlugin_cwForm::Setup () {
 	trackingButton. bgcolor(nana::colors::black);
 	
 	trackingButton. tooltip ("switch tracking");
+
 	cwLetter.transparent(true);
 	cwLetter.fgcolor(nana::colors::white);
+
 	dotLengthdisplay. transparent (true);
 	dotLengthdisplay. fgcolor (nana::colors::white);
+
 	spaceLengthdisplay. transparent(true);
 	spaceLengthdisplay. fgcolor(nana::colors::white);
+
 	agcPeakdisplay. transparent(true);
 	agcPeakdisplay. fgcolor(nana::colors::white);
+
 	noiseLeveldisplay. transparent(true);
 	noiseLeveldisplay. fgcolor(nana::colors::white);
 
@@ -401,6 +428,17 @@ void SDRunoPlugin_cwForm::Setup () {
 	agcPeakdisplay.tooltip("peak value in agc");
 	noiseLeveldisplay.tooltip ("noise level");
 	actualWPM. tooltip ("estimated words per minute");
+
+	delete[] borderPixels;
+	delete[] innerPixels;
+	delete[] closePixels;
+	delete[] closeoverPixels;
+	delete[] minPixels;
+	delete[] minoverPixels;
+	delete[] barPixels;
+	delete[] barfocusedPixels;
+	delete[] settPixels;
+	delete[] settoverPixels;
 }
 
 void SDRunoPlugin_cwForm::SettingsButton_Click()

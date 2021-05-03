@@ -125,6 +125,15 @@ int	SDRunoPlugin_cwUi::cw_getWordsperMinute	() {
 void	SDRunoPlugin_cwUi::cw_switchTracking	() {
 	m_parent. cw_switchTracking ();
 }
+
+void	SDRunoPlugin_cwUi::set_searchWidth	(int w) {
+	m_parent. set_searchWidth (w);
+}
+
+void	SDRunoPlugin_cwUi::trigger_tune		() {
+	m_parent. trigger_tune ();
+}
+
 //
 void	SDRunoPlugin_cwUi::cw_showTrackingMode	(const std::string &s) {
 	std::lock_guard<std::mutex> l (m_lock);
@@ -183,3 +192,4 @@ void	SDRunoPlugin_cwUi::set_cwText	(const std::string &s) {
 	   m_form -> set_cwText (s);
 }
 //
+

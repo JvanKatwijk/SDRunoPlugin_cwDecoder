@@ -43,6 +43,9 @@
 #define  _USE_MATH_DEFINES
 #include        <math.h>
 
+#define	NO_OFFSET_FOUND	-500
+#define	SEARCH_WIDTH	400
+#define	CW_RATE	2000
 #define	IN_RATE	62500
 
 SDRunoPlugin_cw::SDRunoPlugin_cw (IUnoPluginController& controller) :
@@ -52,12 +55,13 @@ SDRunoPlugin_cw::SDRunoPlugin_cw (IUnoPluginController& controller) :
 	                                           cwBuffer (16 * 32768),
 	                                           cwAudioBuffer (16 * 32768),
 	                                           passbandFilter (15,
-		                                                   -2000,
-		                                                   +2000,
+		                                                   -CW_RATE / 2,
+		                                                   +CW_RATE / 2,
 		                                                   IN_RATE),
 	                                           theMixer (IN_RATE),
 	                                           theDecimator (IN_RATE, 2500),
-	                                           cwToneBuffer (128) {
+	                                           cwToneBuffer (128),
+	                                           newFFT (CW_RATE, 0, CW_RATE - 1) {
 	m_controller = &controller;
 	//	cw specifics
 	cw_IF		= CW_IF;
@@ -75,7 +79,7 @@ SDRunoPlugin_cw::SDRunoPlugin_cw (IUnoPluginController& controller) :
 	cwRange		= cwDefaultSpeed / 2;
 	lowerBoundWPM	= cwDefaultSpeed - cwRange;
 	upperBoundWPM	= cwDefaultSpeed + cwRange;
-	cwSpeed		= cwDefaultSpeed;       /* initial      */
+	cwSpeed		= cwDefaultSpeed;       /* initial    */
 
 	cwDefaultDotLength = DOT_MAGIC / cwDefaultSpeed;
 	cwDotLength	= cwDefaultDotLength; // in usec
@@ -109,6 +113,8 @@ SDRunoPlugin_cw::SDRunoPlugin_cw (IUnoPluginController& controller) :
 	convIndex = 0;
 	convBuffer.resize (2500 / 100 + 1);
 
+	searchWidth	= SEARCH_WIDTH;
+	tuning		= false;
 	m_controller	-> RegisterStreamProcessor (0, this);
 	m_controller    -> RegisterAudioProcessor (0, this);
 
@@ -280,6 +286,8 @@ void	SDRunoPlugin_cw::process (std::complex<float> z) {
 	}
 }
 //
+static int fftTeller = 0;
+static float secondsRun	= 0;
 //	the bandpassFilter operates locked since 
 //	another thread might ask to delete/renew it
 void	SDRunoPlugin_cw::processSample (std::complex<float> z) {
@@ -290,6 +298,7 @@ int32_t	t;
 char	buffer [4];
 std::complex<float> res;
 float	value;
+std::complex<float> outV [2000];
 std::vector<std::complex<float>> tone (cwAudioRate / WORKING_RATE);
 
 	locker. lock ();
@@ -302,6 +311,22 @@ std::vector<std::complex<float>> tone (cwAudioRate / WORKING_RATE);
 	}
 	cwAudioBuffer.putDataIntoBuffer (tone. data (), tone. size () * 2);
 
+	if (tuning) {
+	   newFFT. do_FFT (z, outV);
+	   fftTeller ++;
+	   if (fftTeller > CW_RATE / 2) {
+	      int offs = offset (outV);
+	      if ((offs != NO_OFFSET_FOUND) && (abs (offs) >= 3)) {
+	         updateFrequency (offs / 2);
+	      }
+	      fftTeller = 0;
+	      secondsRun += 0.5;
+	      if ((offs == 0) || (secondsRun > 5))
+	         tuning = false;
+	      newFFT. reset ();
+	   }
+	}
+	      
 	value = abs(s);
 	if (value > agc_peak)
 	   agc_peak = decayingAverage (agc_peak, value, 50.0);
@@ -619,5 +644,56 @@ void	SDRunoPlugin_cw::cw_setWordsperMinute (int n) {
 //	thresholdFilter		-> clear (2 * cwDotLength);
 	cw_clrText	();
 	cw_showSymbol (" ");
+}
+
+#define	MAX_SIZE 40
+int	SDRunoPlugin_cw::offset (std::complex<float> *v) {
+float avg	= 0;
+float max	= 0;
+float	supermax	= 0;
+int	superIndex	= 0;
+
+	for (int i = 0 ; i < searchWidth; i ++)
+	   avg += abs (v [(CW_RATE - searchWidth / 2 + i) % CW_RATE]);
+	avg /= searchWidth;
+	int	index	= CW_RATE - searchWidth / 2;
+	for (int i = 0; i < MAX_SIZE; i ++)
+	   max +=  abs (v [index + i]);
+
+	supermax	= max;
+	for (int i = MAX_SIZE; i < searchWidth; i ++) {
+	   max -=  abs (v [(index + i - MAX_SIZE) % CW_RATE]);
+	   max +=  abs (v [(index + i) % CW_RATE]);
+	   if (max > supermax) {
+	      superIndex = (index + i - MAX_SIZE / 2) % CW_RATE;
+	      supermax = max;
+	   }
+	}
+
+	if (supermax / MAX_SIZE > 3 * avg)
+	   return superIndex > CW_RATE / 2 ?
+	                            superIndex - CW_RATE :
+	                                     superIndex;
+	else
+	   return NO_OFFSET_FOUND;
+}
+
+void	SDRunoPlugin_cw::updateFrequency (int d) {
+	if (abs (d) <= 2) 
+	   return;
+	int currentFrequency =
+	                m_controller -> GetVfoFrequency (0);
+	m_controller -> SetVfoFrequency (0, currentFrequency + d);
+}
+
+void	SDRunoPlugin_cw::set_searchWidth(int w) {
+	searchWidth = w;
+}
+
+void	SDRunoPlugin_cw::trigger_tune	() {
+	newFFT. reset ();
+	tuning		= !tuning;
+	fftTeller	= 0;
+	secondsRun	= 0;
 }
 

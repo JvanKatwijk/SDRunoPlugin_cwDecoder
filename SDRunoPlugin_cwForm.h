@@ -52,6 +52,9 @@ void    cw_shownoiseLevel       (int);
 void    cw_showspeed            (int);
 void	cw_audioRate		(int);
 void    set_cwText              (const std::string &);
+void	set_searchWidth		(int);
+void	trigger_tune		(void);
+
 
 	void Run();
 	
@@ -94,9 +97,11 @@ private:
 	nana::label  actualWPM		{*this, nana::rectangle (340, 110,  40, 20) };
 	nana::spinbox WPM		{*this, nana::rectangle ( 30, 170,  80, 20) };
 	nana::button trackingButton     {*this, nana::rectangle (200, 170,  80, 20) };
-	nana::spinbox filterDegree	{*this, nana::rectangle ( 30, 200, 100, 30) };
-	nana::spinbox squelchLevel 	{*this, nana::rectangle (150, 200, 100, 30) };
+	nana::spinbox filterDegree	{*this, nana::rectangle ( 30, 200, 100, 20) };
+	nana::spinbox squelchLevel 	{*this, nana::rectangle (150, 200, 100, 20) };
 
+	nana::spinbox searchWidth	{*this, nana::rectangle (260, 200, 100, 20) };
+	nana::button tuneIn		{*this, nana::rectangle (380, 200, 40, 20)};
 	SDRunoPlugin_cwUi & m_parent;
 	IUnoPluginController & m_controller;
 };

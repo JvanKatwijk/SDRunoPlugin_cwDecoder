@@ -113,6 +113,7 @@
     <ClCompile Include="utilities.cpp" />
     <ClCompile Include="cw-shifter.cpp" />
     <ClCompile Include="up-filter.cpp" />
+    <ClCompile Include="sliding-fft.cpp" />
     <ClCompile Include="SDRunoPlugin_cw.cpp" />
     <ClCompile Include="SDRunoPlugin_cwForm.cpp" />
     <ClCompile Include="SDRunoPlugin_cwProject.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="utilities.h" />
     <ClInclude Include="cw-shifter.h" />
     <ClInclude Include="up-filter.h" />
+    <ClInclude Include="sliding-fft.h" />
     <ClInclude Include="SDRunoPlugin_cw.h" />
     <ClInclude Include="SDRunoPlugin_cwForm.h" />
     <ClInclude Include="SDRunoPlugin_cwUi.h" />

@@ -22,6 +22,7 @@ class	upFilter;
 #include	"cw-bandfilter.h"
 #include	"decimator-25.h"
 #include	"cw-shifter.h"
+#include	"sliding-fft.h"
 
 #define CW_RECEIVE_CAPACITY     030
 #define WORKING_RATE    2000
@@ -55,6 +56,8 @@ public:
 	void    cw_setSquelchValue      (int);
 	void    cw_setWordsperMinute    (int);
 	void	cw_switchTracking	();
+	void	set_searchWidth		(int);
+	void	trigger_tune		();
 private:
 	std::atomic<bool>	running;
 	IUnoPluginController *m_controller;
@@ -69,6 +72,8 @@ private:
 	cwShifter		theMixer;
 	decimator_25		theDecimator;
 	std::vector<std::complex<float>> cwToneBuffer;
+	slidingFFT		newFFT;
+	int			searchWidth;
 //	former signals, now handled locally
 	void			cw_showSymbol		(char *);
 	void			cw_showdotLength	(int);
@@ -95,6 +100,8 @@ private:
 	int			getMeanofDotDash	(int, int);
 	void			lookupToken		(char *, char *);
 
+	int			offset			(std::complex<float> *);
+	void			updateFrequency		(int);
 	int32_t			rawRate;	
 	bool			cwError;
 	bandpassFilter	        *cw_BandPassFilter;
@@ -104,6 +111,7 @@ private:
 	cwAverage	*thresholdFilter;
 	cwAverage	*spaceFilter;
 
+	bool		tuning;
 	float		agc_peak;
 	float		noiseLevel;
 //	float		value;
