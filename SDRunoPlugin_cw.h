@@ -73,7 +73,7 @@ private:
 	decimator_25		theDecimator;
 	std::vector<std::complex<float>> cwToneBuffer;
 	slidingFFT		newFFT;
-	int			searchWidth;
+	int			searchRange;
 //	former signals, now handled locally
 	void			cw_showSymbol		(char *);
 	void			cw_showdotLength	(int);
@@ -83,19 +83,11 @@ private:
 	void			cw_shownoiseLevel	(int);
 	void			cw_clrText		();
 	void			cw_addText		(char);
-
-	int			resample		(std::complex<float>,
-	                                                 std::complex<float> *);
 	int			centerFrequency;
 	int			selectedFrequency;
 	int			cwTonePhase;
-	std::vector<std::complex<float>> convBuffer;
-	int			convIndex;
-	int16_t			mapTable_int   [WORKING_RATE / 100];
-	float			mapTable_float [WORKING_RATE / 100];
 
 	void			processSample		(std::complex<float>);
-	void			process			(std::complex<float>);
 	int			newThreshold		(int, int);
 	int			getMeanofDotDash	(int, int);
 	void			lookupToken		(char *, char *);
@@ -105,13 +97,13 @@ private:
 	int32_t			rawRate;	
 	bool			cwError;
 	bandpassFilter	        *cw_BandPassFilter;
+	bandpassFilter* cw_finalFilter;
 	upFilter	*audioFilter;
 	int16_t		cwFilterDegree;
 	cwAverage	*SmoothenSamples;
 	cwAverage	*thresholdFilter;
 	cwAverage	*spaceFilter;
 
-	bool		tuning;
 	float		agc_peak;
 	float		noiseLevel;
 //	float		value;

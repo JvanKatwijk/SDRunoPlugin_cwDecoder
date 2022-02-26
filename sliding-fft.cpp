@@ -75,7 +75,8 @@ std::complex<float>	old;
 std::complex<float>	z;
 int32_t	i;
 
-	old = std::complex<float> (real (Past [Ptr]) *Corrector, imag (Past [Ptr]) * Corrector);
+	old = std::complex<float> (real (Past [Ptr]) * Corrector,
+	                           imag (Past [Ptr]) * Corrector);
 /*
  *	save the new sample
  */

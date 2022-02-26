@@ -52,6 +52,7 @@ public:
 	void	cw_audioRate		(int);
 	void    cw_showspeed            (int);
 	void	set_cwText		(const std::string &);
+	void	cw_showIF		(int);
 private:
 	
 	SDRunoPlugin_cw & m_parent;

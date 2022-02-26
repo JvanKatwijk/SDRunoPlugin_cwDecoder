@@ -191,5 +191,12 @@ void	SDRunoPlugin_cwUi::set_cwText	(const std::string &s) {
 	if (m_form != nullptr)
 	   m_form -> set_cwText (s);
 }
+
+void	SDRunoPlugin_cwUi::cw_showIF	(int v) {
+	std::lock_guard<std::mutex> l (m_lock);
+	if (m_form != nullptr)
+	   m_form -> cw_showIF (v);
+}
+
 //
 

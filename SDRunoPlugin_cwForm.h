@@ -53,8 +53,8 @@ void    cw_showspeed            (int);
 void	cw_audioRate		(int);
 void    set_cwText              (const std::string &);
 void	set_searchWidth		(int);
+void	cw_showIF		(int);
 void	trigger_tune		(void);
-
 
 	void Run();
 	
@@ -86,7 +86,8 @@ private:
 	// TODO: Now add your UI controls here
 
 //	first the test line
-	nana::label  cwText		{*this, nana::rectangle ( 30,  40, 400, 30) };
+	nana::label  cwText		{*this, nana::rectangle ( 30,  40, 380, 30) };
+	nana::label  copyRightLabel	{*this, nana::rectangle ( 420, 30, 30, 30) };
 	nana::label  cwSymbol		{*this, nana::rectangle ( 30,  80,  40, 20) };
 	nana::label  cwLetter		{*this, nana::rectangle ( 80,  80, 100, 20) };
 	nana::label  dotLengthdisplay 	{*this, nana::rectangle ( 30, 110,  40, 20) };
@@ -97,6 +98,7 @@ private:
 	nana::label  actualWPM		{*this, nana::rectangle (340, 110,  40, 20) };
 	nana::spinbox WPM		{*this, nana::rectangle ( 30, 170,  80, 20) };
 	nana::button trackingButton     {*this, nana::rectangle (200, 170,  80, 20) };
+	nana::label cw_ifDisplay{ *this, nana::rectangle(300, 170, 80, 20) };
 	nana::spinbox filterDegree	{*this, nana::rectangle ( 30, 200, 100, 20) };
 	nana::spinbox squelchLevel 	{*this, nana::rectangle (150, 200, 100, 20) };
 

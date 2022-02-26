@@ -29,7 +29,7 @@
 \newcommand{\notrans}[3]{#1 \stackrel{#2}{\not\! \longrightarrow} #3}
 \bibliographystyle{plain}
 \begin{document}
-\title{A simple CW plugin for SDRuno (Version 2)}
+\title{A simple CW plugin for SDRuno (Version 3)}
 \author{
 Jan van Katwijk\\
 Lazy Chair Computing \\
@@ -49,50 +49,33 @@ CW is in amateur bands still very popular, I am usually looking at the
 
 \section{Settings}
 CW (basically carrier on/carrier off) is a signal with a small footprint,
-the width used on  the band is less than 50 Hz.
+the width used on  the band can be less than 50 Hz.
 The decoder therefore works with an intermediate
-samplerate of 2000 samples/second. Since the minimal samplerate for the
-SDRplay family is 2000000, a lot of decimation (and filtering) has to be done.
+samplerate of 2000 samples/second.
 \par
-This implementation requires an input sample rate of 62500 samples/second,
-this requires the setting of the mainwidget to a samplerate of 2000000,
-and a decimation of 32, as shown in the picture.
-One should realize that the SDRuno spectrum display shows a band of 62.5
-KHz, the advantage is that one sees a lot of signals, the disadvantage
+This implementation select the so-called {\em IQ-OUT} option, so
+decosing basically uses the unprocessed input, down-sampled to 192000.
+One should realize that the SDRuno spectrum display shows default a
+wide band, the advantage is that one sees a lot of signals, the disadvantage
 is that precise tuning, based on the view on the spectrum is not easy.
 
 \includegraphics[width=100mm]{main-widget.png}
 
 The plugin generates an audiotone of 800 Hz + the tuning offset,
 At least for me, some sound helps with tuning.
-The sound is output with a rate of 48000, setting "AM" in the RX control window
-will set this rate.
 
 \section{Tuning}
 As said, CW is a signal with a small footprint, and since many of
 the amateur transmissions are brief messages (such as CQ CQ ...), tuning
 requires some training.
 \par
-What is really helpful here is enlarging the auxiliary spectrum display,
-and zooming in.
+What is really helpful is {\em zooming in} on the main display.
+\includegraphics[width=100mm]{main-spectrum-display.png}
 
-\includegraphics[width=100mm]{auxiliary-spectrum-display.png}
+To ais in tuning, this version of the decoder is equipped with
+an automatic tuning aid.
+{\em Within a (user specified) range, the plugin will tune to the strongest signal,}
 
-The way to tune is in two steps
-\begin{itemize}
-\item coarse tuning with the mouse on the main spectrum display;
-\item fine tuning with the mouse controlled numerical display until the
-CW signal is above the '0' in the auxiliary spectrum display.
-\end{itemize}
-The drawback of course is that CW transmissions are only a few seconds long,
-so by the time tuning is - more or less - correct, the transmission stopped.
-\par
-Version 2 of the decoder has an additional button for automatic fine tuning.
-Touhcing the button will instruct the software to look at a segment of the
-cand the width of which is given in the spinbox (default 400 Hz), and
-detect the strongest signal - a signal with at least 6dB above the
-average signal level in the segment. If such a signal in the spectrum is
-detected, tuning will be moving slowly to that point.
 \section{The plugin}
 The plugin widget  is shown in the picture
 
@@ -109,7 +92,7 @@ the wpm estimate.
 
 The top line in the widget shows the received text,
 the second line - in the picture only containing a single dot -
-displays the dots and dashes of the letter received.
+displays the dots and dashes of the letter currently being received.
 The third line contains 6 number displays, from left to right
 \begin{itemize}
 \item the number of micro seconds {\em assumed} as duration for a dot. The 
@@ -128,6 +111,8 @@ is seen with a duration longer than a few seconds, a tracker can be activated
 that adapts the assumed WPM. However, for transmissions of 3, 4 seconds
 as usually seen on the 14 MHz band, it is not advisable to set the tracker on.
 
+The number display in this row tells the computed offset/ 
+
 Finally, the bottom row contains three spinboxes and a button:
 \begin{itemize}
 \item the {\em filter depth}. Before attempting to decode the on/off appearance
@@ -138,10 +123,7 @@ can be set.
 \item the width of the fine tuning search. The picture shows "400", indicating
 that - with the current frequency as middle - a segment of 400 Hz is searched
 for the strongest signal if "fine tuning" is on.
-\item the button, when touched will start the fine tuning, unttil either
-the strongerst signal in the selected region (one with a signal strength
-of 6 dB or more than the average signal strength of the region) or a time out
-expires.
+\item the button, when touched will reset the automatic tuning aid.
 \end{itemize}
 \end{document}
 

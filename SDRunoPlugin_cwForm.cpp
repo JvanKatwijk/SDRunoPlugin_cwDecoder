@@ -86,6 +86,9 @@ void	SDRunoPlugin_cwForm::set_cwText	(const std::string &s) {
 	cwText. caption (s);
 }
 
+void	SDRunoPlugin_cwForm::cw_showIF (int n) {
+	cw_ifDisplay. caption (std::to_string (n));
+}
 
 // Form constructor with handles to parent and uno controller - launches form Setup
 SDRunoPlugin_cwForm::SDRunoPlugin_cwForm(
@@ -377,8 +380,8 @@ void SDRunoPlugin_cwForm::Setup () {
 	squelchLevel. events (). text_changed ([&](const nana::arg_spinbox &s) {
 	                            cw_setSquelchValue (squelchLevel. to_int ());}); 
 
-	searchWidth. range (0, 600, 1);
-	searchWidth. value (std::to_string (400));
+	searchWidth. range (0, 1000, 10);
+	searchWidth. value (std::to_string (800));
 	searchWidth. events (). text_changed ([&](const nana::arg_spinbox &s) {
 	                            set_searchWidth (searchWidth. to_int ());});
 	searchWidth. tooltip ("range of search for maximum signal value");
@@ -415,8 +418,17 @@ void SDRunoPlugin_cwForm::Setup () {
 	noiseLeveldisplay. transparent(true);
 	noiseLeveldisplay. fgcolor(nana::colors::white);
 
-	cwText. transparent(true);
+	cwText. transparent (true);
 	cwText. fgcolor(nana::colors::white);
+
+	copyRightLabel. transparent (true);
+	copyRightLabel. fgcolor (nana::colors::white);
+	copyRightLabel. caption ("\xa9 2022");
+	copyRightLabel. tooltip ("This plugin is created by Jan van Katwijk\n\
+all rights reserved");
+
+	cw_ifDisplay. transparent (true);
+	cw_ifDisplay. fgcolor (nana::colors::white);
 	cwSymbol.transparent(true);
 	cwSymbol.fgcolor(nana::colors::white);
 	actualWPM.transparent(true);
