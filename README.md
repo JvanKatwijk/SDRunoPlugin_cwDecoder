@@ -13,11 +13,12 @@ decoding CW (continuous waves) signals.
 -----------------------------------------------------------------------------
 
 Since cw is a small band signal (a few dozens of Hz in this plugin),
-the samplerate used as input for the plugin is *62500* samples/second.
-
-**On the main widget select samplerate 2000000, and decimation factor 32**.
-
-![overview](/drm-main-widget.png?raw=true)
+the samplerate used as input for the plugin is 192000 samples/second.
+The SDRuno framework provides the 192000 samples/second stream using the
+SP1 port.
+Note that a small signal is hard to detect on a 2 MHz wide spectrum,
+so use the zooming facility of the main spectrum display to show a
+smaller signal.
 
 The plugin itself can be stored in the folder for community plugins
 
