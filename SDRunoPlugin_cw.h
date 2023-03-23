@@ -16,16 +16,17 @@
 //	for the payload we have
 #include	"ringbuffer.h"
 class   cwAverage;
-class	upFilter;
+class	LowPassFIR;
 
 #include	"utilities.h"
 #include	"cw-bandfilter.h"
+#include	"lowpassfilter.h"
 #include	"decimator-25.h"
+#include	"decimator.h"
 #include	"cw-shifter.h"
 #include	"sliding-fft.h"
 
 #define CW_RECEIVE_CAPACITY     030
-#define WORKING_RATE    2000
 
 class SDRunoPlugin_cw : public IUnoPlugin,	
 	                       public IUnoStreamProcessor,
@@ -66,14 +67,16 @@ private:
 	std::mutex		locker;
 	SDRunoPlugin_cwUi	m_form;
 	std::thread*		m_worker;
-	RingBuffer<Complex>	cwBuffer;
-	RingBuffer<float>	cwAudioBuffer;
+	RingBuffer<std::complex<float>>	cwBuffer;
 	bandpassFilter		passbandFilter;
-	cwShifter		theMixer;
-	decimator_25		theDecimator;
+	LowPassFIR		audioFilter;
+	RingBuffer<float>	audioBuffer;
+	decimator		theDecimator_1;
+	decimator		theDecimator_2;
 	std::vector<std::complex<float>> cwToneBuffer;
 	slidingFFT		newFFT;
 	int			searchRange;
+	bool			autoTuning;
 //	former signals, now handled locally
 	void			cw_showSymbol		(char *);
 	void			cw_showdotLength	(int);
@@ -96,9 +99,8 @@ private:
 	void			updateFrequency		(int);
 	int32_t			rawRate;	
 	bool			cwError;
-	bandpassFilter	        *cw_BandPassFilter;
-	bandpassFilter* cw_finalFilter;
-	upFilter	*audioFilter;
+	bandpassFilter	       *cw_BandPassFilter;
+	bandpassFilter		* cw_finalFilter;
 	int16_t		cwFilterDegree;
 	cwAverage	*SmoothenSamples;
 	cwAverage	*thresholdFilter;

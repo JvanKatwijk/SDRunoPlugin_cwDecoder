@@ -1,0 +1,265 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.1.8)  23 MAR 2023 13:29
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**cw.tex
+(./cw.tex
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-05-07>
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2020/04/10 v1.4m Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size11.clo
+File: size11.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
+)
+\c@part=\count179
+\c@section=\count180
+\c@subsection=\count181
+\c@subsubsection=\count182
+\c@paragraph=\count183
+\c@subparagraph=\count184
+\c@figure=\count185
+\c@table=\count186
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2020/09/09 v1.2b Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks15
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2020/08/30 v1.4c Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen139
+\Gin@req@width=\dimen140
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks16
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(/usr/share/texlive/texmf-dist/tex/latex/base/latexsym.sty
+Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
+\symlasy=\mathgroup6
+LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
+(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 52.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
+)
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2021-05-07 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count187
+\l__pdf_internal_box=\box47
+)
+(./cw.aux)
+\openout1 = `cw.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+ (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count188
+\scratchdimen=\dimen141
+\scratchbox=\box48
+\nofMPsegments=\count189
+\nofMParguments=\count190
+\everyMPshowfont=\toks17
+\MPscratchCnt=\count191
+\MPscratchDim=\dimen142
+\MPnumerator=\count192
+\makeMPintoPDFobject=\count193
+\everyMPtoPDFconversion=\toks18
+) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+LaTeX Font Info:    Trying to load font information for U+msa on input line 39.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 39.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Trying to load font information for U+lasy on input line 39
+.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ulasy.fd
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+)
+<cw-example.png, id=1, 1445.4pt x 813.0375pt>
+File: cw-example.png Graphic file (type png)
+<use cw-example.png>
+Package pdftex.def Info: cw-example.png  used on input line 43.
+(pdftex.def)             Requested size: 398.33858pt x 224.06363pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--45
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--45
+
+ []
+
+[1
+
+{/usr/share/texlive/texmf-var/fonts/map/pdftex/updmap/pdftex.map
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): invalid entry for `pcrr8rn': SlantFont/ExtendFont can be used
+ only with embedded Type1 fonts
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rpxpplb' already exists, duplicates ignore
+d
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rpxpplbi' already exists, duplicates ignor
+ed
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): invalid entry for `rpxpplbo': SlantFont/ExtendFont can be use
+d only with embedded Type1 fonts
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rpxpplr' already exists, duplicates ignore
+d
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rpxpplri' already exists, duplicates ignor
+ed
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): invalid entry for `rpxpplro': SlantFont/ExtendFont can be use
+d only with embedded Type1 fonts
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rtxphvb' already exists, duplicates ignore
+d
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rtxphvbo' already exists, duplicates ignor
+ed
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rtxphvr' already exists, duplicates ignore
+d
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rtxphvro' already exists, duplicates ignor
+ed
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rtxptmb' already exists, duplicates ignore
+d
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rtxptmbi' already exists, duplicates ignor
+ed
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rtxptmbo' already exists, duplicates ignor
+ed
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rtxptmr' already exists, duplicates ignore
+d
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rtxptmri' already exists, duplicates ignor
+ed
+
+
+pdfTeX warning: pdflatex (file /usr/share/texlive/texmf-var/fonts/map/pdftex/up
+dmap/pdftex.map): fontmap entry for `rtxptmro' already exists, duplicates ignor
+ed
+} <./cw-example.png>]
+<cw-plugin-widget.png, id=12, 371.88937pt x 179.16937pt>
+File: cw-plugin-widget.png Graphic file (type png)
+<use cw-plugin-widget.png>
+Package pdftex.def Info: cw-plugin-widget.png  used on input line 83.
+(pdftex.def)             Requested size: 284.52756pt x 137.08325pt.
+ [2 <./cw-plugin-widget.png>] [3] (./cw.aux) ) 
+Here is how much of TeX's memory you used:
+ 1794 strings out of 480806
+ 25067 string characters out of 5905152
+ 307122 words of memory out of 6000000
+ 19176 multiletter control sequences out of 15000+600000
+ 410631 words of font info for 55 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 55i,6n,62p,199b,230s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fo
+nts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/share/texlive/texmf-dist/fonts/en
+c/dvips/lm/lm-rep-cmit.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/lm/lm
+-rep-cmrm.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/lm/lmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/lm/lmri10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/lm/lmri12.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb>
+Output written on cw.pdf (3 pages, 1397250 bytes).
+PDF statistics:
+ 49 PDF objects out of 1000 (max. 8388607)
+ 33 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+

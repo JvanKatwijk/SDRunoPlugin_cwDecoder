@@ -38,30 +38,49 @@
  *      PARIS) is 50 bits, then for a wpm of 1,
  *      one bit takes 1.2 second or 1.2 x 10^6  microseconds
  */
-#define DOT_MAGIC               1200000
+#define DOT_MAGIC         1200000
 
 #define  _USE_MATH_DEFINES
 #include        <math.h>
 
 #define	NO_OFFSET_FOUND	-500
-#define	SEARCH_WIDTH	400
-#define	CW_RATE	2000
+#define	SEARCH_WIDTH	800
+#define	CW_RATE		500
 #define	IN_RATE	192000
+
+static inline
+std::complex<float> cmul(std::complex<float> v, float m) {
+	return std::complex<float>(real(v) * m, imag(v) * m);
+}
 
 SDRunoPlugin_cw::SDRunoPlugin_cw (IUnoPluginController& controller) :
 	                                           IUnoPlugin (controller),
 	                                           m_form (*this, controller),
 	                                           m_worker (nullptr),
+	                                           passbandFilter (25,
+	                                                           -400,
+	                                                            400,
+	                                                           IN_RATE),
 	                                           cwBuffer (16 * 32768),
-	                                           cwAudioBuffer (16 * 32768),
-	                                           passbandFilter (35,
-		                                                   -CW_RATE / 2,
-		                                                   +CW_RATE / 2,
-		                                                   IN_RATE),
-	                                           theMixer (IN_RATE),
-	                                           theDecimator (IN_RATE, 2000),
+	                                           audioFilter (11,
+	                                                        1000, IN_RATE),
+	                                           audioBuffer (8 * 32768),
+	                                           theDecimator_1 (25,
+	                                                          -400,
+	                                                           400,
+	                                                           IN_RATE, 
+	                                                           IN_RATE / 12000),
+	                                           theDecimator_2 (15,
+	                                                           - CW_RATE / 2,
+	                                                            CW_RATE / 2,
+	                                                            12000,
+	                                                            12000 / CW_RATE),
+		                                                  
+//	                                           theMixer (IN_RATE),
+//	                                           theDecimator (IN_RATE, 2000),
 	                                           cwToneBuffer (128),
-	                                           newFFT (CW_RATE, 0, CW_RATE - 1) {
+	                                           newFFT (CW_RATE, 0, CW_RATE - 1) 
+{
 	m_controller = &controller;
 	//	cw specifics
 	cw_IF		= CW_IF;
@@ -100,35 +119,32 @@ SDRunoPlugin_cw::SDRunoPlugin_cw (IUnoPluginController& controller) :
 	cw_BandPassFilter = new bandpassFilter (2 * cwFilterDegree + 1,
 	                                        cw_IF - 500,
 	                                        cw_IF + 500,
-		                                WORKING_RATE);
+		                                CW_RATE);
 	cw_finalFilter	= new bandpassFilter (2 * cwFilterDegree - 1,
 	                                      cw_IF - 50,
-	                                      cw_IF + 50, WORKING_RATE);
+	                                      cw_IF + 50, CW_RATE);
 	                                      
 //
-
-
 	searchRange	= SEARCH_WIDTH;
-	m_controller	-> RegisterStreamProcessor (0, this);
-	m_controller    -> RegisterAudioProcessor (0, this);
-	m_controller    -> SetDemodulatorType (0,
-                                 IUnoPluginController::DemodulatorIQOUT);
-
-	selectedFrequency
-	                = m_controller -> GetVfoFrequency (0);
-	centerFrequency = m_controller -> GetCenterFrequency (0);
+//
+//	we know that the audiorate is 192000 in this model
+	m_controller->RegisterStreamProcessor (0, this);
+	m_controller->RegisterAudioProcessor (0, this);
+	m_controller->SetDemodulatorType(0,
+		IUnoPluginController::DemodulatorIQOUT);
 	cwAudioRate	= m_controller -> GetAudioSampleRate (0);
+	m_form. cw_audioRate (cwAudioRate);
+//	cwAudioRate = 192000;
 	cwError		= false;
 
 	cwToneBuffer. resize (cwAudioRate);
 	for (int i = 0; i < cwAudioRate; i++) {
 	   float term = (float)i / cwAudioRate * 2 * M_PI;
-	   cwToneBuffer [i] = std::complex<float> (cos (term),
-	                                           sin (term));
-	} 
+	   cwToneBuffer [i] = std::complex<float> (cos (term), sin (term));
+	}
+	autoTuning	= false; 
 	cwTonePhase	= 0;
-	m_form. cw_audioRate (cwAudioRate);
-	audioFilter	= new upFilter (25, WORKING_RATE, cwAudioRate);
+
 	m_worker        = new std::thread (&SDRunoPlugin_cw::WorkerFunction,
 	                                                               this);
 }
@@ -143,41 +159,44 @@ SDRunoPlugin_cw::SDRunoPlugin_cw (IUnoPluginController& controller) :
 	m_worker = nullptr;
 	delete cw_BandPassFilter;
 	delete cw_finalFilter;
-	delete audioFilter;
 }
 //
-//	The assumption is that the inputstream has a rate
-//	of 2000000 / 32
 void    SDRunoPlugin_cw::StreamProcessorProcess (channel_t channel,
 	                                         Complex *buffer,
 	                                         int length,
 	                                         bool& modified) { 
 	(void)channel; (void)buffer; (void)length;
-	modified = false;
+//	modified = false;
 }
-
+//
+// 
 void    SDRunoPlugin_cw::AudioProcessorProcess (channel_t channel,
 	                                        float* buffer,
 	                                        int length,
 	                                        bool& modified) {
-//	/      Handling IQ input, note that SDRuno interchanges I and Q elements
-        if (!modified) {
-           for (int i = 0; i < length; i++) {
-              std::complex<float> sample =
-                           std::complex<float>(buffer [2 * i +  1],
-                                               buffer [2 * i]);
-              sample = passbandFilter.Pass (sample);
-//      since Offset == 0, we do not need a shift here
-//            sample = theMixer.do_shift (sample, theOffset);
-              if (theDecimator.Pass (sample, &sample))
-                 cwBuffer.putDataIntoBuffer (&sample, 1);
-           }
-        }
+///      Handling IQ input, note that SDRuno interchanges I and Q elements
 
-	if (cwAudioBuffer. GetRingBufferReadAvailable () >= length * 2) {
-	   cwAudioBuffer. getDataFromBuffer (buffer, length * 2);
+	if (!modified) {
+	   for (int i = 0; i < length; i++) {
+	      std::complex<float> sample =
+	                   std::complex<float>(buffer [2 * i + 1],
+	                                       buffer [2 * i]);
+	      sample = passbandFilter. Pass (sample);
+	      cwBuffer. putDataIntoBuffer (&sample, 1);
+	   }
 	}
-	modified = true;
+	if (audioBuffer. GetRingBufferReadAvailable () >= length) {
+	   for (int i = 0; i < length; i ++) {
+	      std::complex<float> sample;
+		  audioBuffer. getDataFromBuffer (&sample, 1);
+	      sample	=  cmul (sample * cwToneBuffer [cwTonePhase], 20);
+	      cwTonePhase	= (cwTonePhase + 601) % cwAudioRate;
+	      sample		= audioFilter. Pass (sample);
+	      buffer [2 * i + 1] = real (sample);
+	      buffer [2 * i]	= imag (sample);
+	   }
+	   modified = true;
+	}
 }
 
 void	SDRunoPlugin_cw::HandleEvent (const UnoEvent& ev) {
@@ -204,24 +223,34 @@ float   clamp (float X, float Min, float Max) {
 	return X;
 }
 
-#define	BUFFER_SIZE	4096
+#define	BUFFER_SIZE	2048
 void	SDRunoPlugin_cw::WorkerFunction () {
 std::complex<float> buffer [BUFFER_SIZE];
 int	cycleCount	= 0;
-
+int	cycles		= 0;
 	running. store (true);
+	m_form. set_cwText ("start of worker function");
 	while (running. load ()) {
 	   while (running. load () &&
 	              (cwBuffer. GetRingBufferReadAvailable () <  BUFFER_SIZE))
 	      Sleep (1);
 	   if (!running. load ())
 	      break;
+
 	   cwBuffer. getDataFromBuffer (buffer, BUFFER_SIZE);
-	   for (int i = 0; i < BUFFER_SIZE; i ++)
-	      processSample (buffer [i]);
-	   cycleCount += BUFFER_SIZE;
-	   if (cycleCount > IN_RATE) {
+	   for (int i = 0; i < BUFFER_SIZE; i ++) {
+	      std::complex<float> sample = buffer [i];
+	      audioBuffer. putDataIntoBuffer (&buffer [i], 1);
+	      if (theDecimator_1. Pass (sample, &sample) &&
+	              theDecimator_2. Pass (sample, &sample)) {
+	         processSample (sample);
+	         cycleCount += 1;
+	      }
+	   }
+
+	   if (cycleCount > CW_RATE * 2) {
 	      cycleCount		= 0;
+	      cycles ++;
 	      m_form. cw_audioRate	(cwAudioRate);
 	      cw_showdotLength		(cwDotLength);
 	      cw_showspaceLength	(cwSpaceLength);
@@ -233,10 +262,8 @@ int	cycleCount	= 0;
 	m_form.set_cwText ("end of worker function");
 	Sleep(1000);
 }
-static inline
-std::complex<float> cmul(std::complex<float> v, float p) {
-	return std::complex<float>(real(v) * p, imag(v) * p);
-}
+
+std::complex<float> cmul (std::complex<float> v, float p);
 //
 static int fftTeller = 0;
 void	SDRunoPlugin_cw::processSample (std::complex<float> z) {
@@ -249,45 +276,39 @@ std::complex<float> res;
 static
 float	value = 0;
 std::complex<float> outV [2000];
-std::vector<std::complex<float>> tone (cwAudioRate / WORKING_RATE);
 
-//	cw_BandPassFilter is supposed to be "wide"
+//	cw_BandPassFilter is supposed to be "wide", about 500 Hz
 	std::complex<float> s	= cw_BandPassFilter	-> Pass (z);
-	audioFilter -> Filter (cmul (s, 20), tone. data ());
-	for (int i = 0; i < tone. size (); i ++) {
-	   tone [i] *= cwToneBuffer [cwTonePhase];
-	   cwTonePhase = (cwTonePhase + 801) % cwAudioRate;
-	}
-	cwAudioBuffer.putDataIntoBuffer (tone. data (), tone. size () * 2);
 
-	if (value >= agc_peak / 2) {
+	if ((value >= agc_peak / 2) && autoTuning) {
 	   newFFT. do_FFT (z, outV);
 	   fftTeller ++;
 	   if (fftTeller > CW_RATE / 2) {
 	      int offs = offset (outV);
 	      if ((offs != NO_OFFSET_FOUND) && (abs (offs) >= 3)) {
 	         if ((- searchRange / 2 < cw_IF + offs) &&
-	             (cw_IF + offs / 2 < searchRange)) {
-                    cw_IF += offs / 2;
+	             (cw_IF + offs / 2 < searchRange) &&
+	             (cw_IF + offs / 2 < CW_IF + 300) &&
+	             (CW_IF - 300 < cw_IF + offs)) {
+	            cw_IF += offs / 2;
 	            cw_finalFilter -> update (cw_IF - 50, cw_IF + 50);
-                    updateFrequency (offs / 2);
-                  
+	            updateFrequency (offs / 2);
 	         }
-              }
-		  m_form.cw_showIF(cw_IF);
+	      }
+	      m_form. cw_showIF (cw_IF);
 	      fftTeller = 0;
 	      newFFT. reset ();
 	   }
 	}
 	      
 	s	= cw_finalFilter -> Pass (s);
-	value = abs(s);
+	value = abs (s);
 	if (value > agc_peak)
 	   agc_peak = decayingAverage (agc_peak, value, 50.0);
 	else
 	   agc_peak = decayingAverage (agc_peak, value, 500.0);
 
-	currentTime += USECS_PER_SEC / WORKING_RATE;
+	currentTime += USECS_PER_SEC / CW_RATE;
 	switch (cwState) {
 	   case MODE_IDLE:
 	      if ((value > 0.67 * agc_peak) &&
@@ -564,9 +585,9 @@ void	SDRunoPlugin_cw::cw_setFilterDegree (int n) {
 	if (cw_BandPassFilter != NULL)
 	   delete cw_BandPassFilter;
 	cw_BandPassFilter	= new bandpassFilter (2 * cwFilterDegree + 1,
-	                                              cw_IF - 30,
-	                                              cw_IF + 30,
-	                                              WORKING_RATE);
+	                                              cw_IF - 500,
+	                                              cw_IF + 500,
+	                                              CW_RATE);
 	locker. unlock ();
 }
 
@@ -600,16 +621,18 @@ void	SDRunoPlugin_cw::cw_setWordsperMinute (int n) {
 	cw_showSymbol (" ");
 }
 
-#define	MAX_SIZE 40
+#define	MAX_SIZE 24
 int	SDRunoPlugin_cw::offset (std::complex<float> *v) {
 float avg	= 0;
 float max	= 0;
 float	supermax	= 0;
 int	superIndex	= 0;
 
-	for (int i = 0 ; i < searchRange; i ++)
+	
+	for (int i = 0; i < searchRange; i ++)
 	   avg += abs (v [(CW_RATE - searchRange / 2 + i) % CW_RATE]);
 	avg /= searchRange;
+
 	int	index	= CW_RATE - searchRange / 2;
 	for (int i = 0; i < MAX_SIZE; i ++)
 	   max +=  abs (v [index + i]);
@@ -619,13 +642,13 @@ int	superIndex	= 0;
 	   max -=  abs (v [(index + i - MAX_SIZE) % CW_RATE]);
 	   max +=  abs (v [(index + i) % CW_RATE]);
 	   if (max > supermax) {
-	      superIndex = (index + i - MAX_SIZE / 2);
+	      superIndex = (index + i - MAX_SIZE);
 	      supermax = max;
 	   }
 	}
 
 	if (supermax / MAX_SIZE > 3 * avg)
-	   return superIndex - CW_RATE;
+	   return (superIndex - CW_RATE);
 	else
 	   return NO_OFFSET_FOUND;
 }
@@ -643,6 +666,7 @@ void	SDRunoPlugin_cw::set_searchWidth(int w) {
 }
 
 void	SDRunoPlugin_cw::trigger_tune	() {
+	autoTuning = !autoTuning;
 	newFFT. reset ();
 //	fftTeller	= 0;
 	cw_IF		= 0;

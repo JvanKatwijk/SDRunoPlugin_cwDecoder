@@ -45,7 +45,7 @@ The Netherlands\\
 \section{Introduction}
 The SDRuno cw plugin is a simple plugin to decode CW (Continuous Waves) signals.
 CW is in amateur bands still very popular, I am usually looking at the
-14 MHz band. 
+14 MHz band, around 14025 KHz. 
 
 \section{Settings}
 CW (basically carrier on/carrier off) is a signal with a small footprint,
@@ -53,13 +53,12 @@ the width used on  the band can be less than 50 Hz.
 The decoder therefore works with an intermediate
 samplerate of 2000 samples/second.
 \par
-This implementation select the so-called {\em IQ-OUT} option, so
-decosing basically uses the unprocessed input, down-sampled to 192000.
+This implementation select the so-called {\em IQ-OUT} option of SDRuno, so
+decoding basically uses the unprocessed input, down-sampled to 192000.
 One should realize that the SDRuno spectrum display shows default a
-wide band, the advantage is that one sees a lot of signals, the disadvantage
-is that precise tuning, based on the view on the spectrum is not easy.
-
-\includegraphics[width=100mm]{main-widget.png}
+wide band - usually 2 MHz - the advantage is that one sees a lot of signals,
+the disadvantage is that precise tuning, based on the view on
+the spectrum is not easy.
 
 The plugin generates an audiotone of 800 Hz + the tuning offset,
 At least for me, some sound helps with tuning.
@@ -69,12 +68,14 @@ As said, CW is a signal with a small footprint, and since many of
 the amateur transmissions are brief messages (such as CQ CQ ...), tuning
 requires some training.
 \par
-What is really helpful is {\em zooming in} on the main display.
-\includegraphics[width=100mm]{main-spectrum-display.png}
+What is really helpful is {\em zooming in} on the main display
+as was shown on the first picture.
 
-To ais in tuning, this version of the decoder is equipped with
-an automatic tuning aid.
-{\em Within a (user specified) range, the plugin will tune to the strongest signal,}
+To aid in tuning, this version of the decoder is equipped with
+an {\em automatic tuning aid}.
+Touching the {\em tune} button instructs the software to look - for
+about half a second - for the strongest signal in a user specfied range
+and adapt the frequency to make that the center signal.
 
 \section{The plugin}
 The plugin widget  is shown in the picture
@@ -86,7 +87,7 @@ transmission speeds.
 The way the plugin works is that the {\em duration} of the signal above
 a certain noise level is measured. As known, a dot and a space within the
 encoding of a letter have the same length, while a dash is supposed to take 3 times as much time.
-Experience shows that most operators transmit with app 25 to 30 words per
+Experience shows that most operators transmit with app 25 to 35 words per
 minute. The spinbox - in the picture set to "19" - can be used to adapt 
 the wpm estimate.
 
@@ -111,7 +112,7 @@ is seen with a duration longer than a few seconds, a tracker can be activated
 that adapts the assumed WPM. However, for transmissions of 3, 4 seconds
 as usually seen on the 14 MHz band, it is not advisable to set the tracker on.
 
-The number display in this row tells the computed offset/ 
+The number display in this row tells the computed offset.
 
 Finally, the bottom row contains three spinboxes and a button:
 \begin{itemize}

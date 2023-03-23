@@ -37,8 +37,8 @@ bool	decimator_25::Pass (std::complex<float> in, std::complex<float> *out) {
 	counter --;
 	iValue += in;
 	if (counter == 0) {
-		*out = iValue;
-		iValue = 0;
+	   *out = iValue;
+	   iValue = 0;
 	   counter = amount;
 	   return true;
 	}

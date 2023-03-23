@@ -98,7 +98,7 @@ private:
 	nana::label  actualWPM		{*this, nana::rectangle (340, 110,  40, 20) };
 	nana::spinbox WPM		{*this, nana::rectangle ( 30, 170,  80, 20) };
 	nana::button trackingButton     {*this, nana::rectangle (200, 170,  80, 20) };
-	nana::label cw_ifDisplay{ *this, nana::rectangle(300, 170, 80, 20) };
+	nana::label cw_ifDisplay	{ *this, nana::rectangle(300, 170, 80, 20) };
 	nana::spinbox filterDegree	{*this, nana::rectangle ( 30, 200, 100, 20) };
 	nana::spinbox squelchLevel 	{*this, nana::rectangle (150, 200, 100, 20) };
 

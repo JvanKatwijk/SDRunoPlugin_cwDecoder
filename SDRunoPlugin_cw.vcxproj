@@ -109,10 +109,8 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="cw-bandfilter.cpp" />
     <ClCompile Include="decimator.cpp" />
-    <ClCompile Include="decimator-25.cpp" />
     <ClCompile Include="utilities.cpp" />
-    <ClCompile Include="cw-shifter.cpp" />
-    <ClCompile Include="up-filter.cpp" />
+    <ClCompile Include="lowpassfilter.cpp" />
     <ClCompile Include="sliding-fft.cpp" />
     <ClCompile Include="SDRunoPlugin_cw.cpp" />
     <ClCompile Include="SDRunoPlugin_cwForm.cpp" />
@@ -124,10 +122,8 @@
     <ClInclude Include="ringbuffer.h" />
     <ClInclude Include="cw-bandfilter.h" />
     <ClInclude Include="decimator.h" />
-    <ClInclude Include="decimator-25.h" />
     <ClInclude Include="utilities.h" />
-    <ClInclude Include="cw-shifter.h" />
-    <ClInclude Include="up-filter.h" />
+    <ClInclude Include="lowpassfilter.h" />
     <ClInclude Include="sliding-fft.h" />
     <ClInclude Include="SDRunoPlugin_cw.h" />
     <ClInclude Include="SDRunoPlugin_cwForm.h" />

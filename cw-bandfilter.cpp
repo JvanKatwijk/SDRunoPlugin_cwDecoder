@@ -66,7 +66,6 @@ float	sum	= 0.0;
 
 	for (int i = 0; i < filterSize; i ++)
 	   Buffer [i] = std::complex<float> (0, 0);
-
 }
 
 	bandpassFilter::~bandpassFilter () {
